@@ -29,11 +29,20 @@ public class JobLogger
         {
             throw new InvalidConfigurationException("Invalid configuration");
         }
+        else
+        {
+            _initialized = true;
+        }
     }
 
     //replace "string message" by string messageText
     public void LogMessage(string messageText, bool message, bool warning, bool error)
     {
+        if (!_initialized)
+        {
+            throw new NotInitializedException("Must initialized");
+        }
+
         if (string.IsNullOrWhiteSpace(messageText))
         {
             return;
