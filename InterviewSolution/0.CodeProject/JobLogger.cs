@@ -73,7 +73,7 @@ public class JobLogger
 
         if (_logToFile)
         {
-            LogToFile(messageText, logLevel);            
+            LogToFile(messageText, logLevel);
         }
 
         if (_logToConsole)
@@ -186,7 +186,7 @@ public class JobLogger
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("Error: Error console", ex);
+            throw new LogToConsoleException("Error: Error console", ex);
         }
     }
 
