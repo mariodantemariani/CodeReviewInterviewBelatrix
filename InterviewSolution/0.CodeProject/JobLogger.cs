@@ -1,6 +1,7 @@
 ﻿using _0.CodeProject.Exceptions;
 using System;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -48,6 +49,10 @@ public class JobLogger
         }
     }
 
+    public JobLogger()
+    {
+    }
+
     [System.Obsolete("use method LogMessage(string message, LogLevel logLevel)")]
     public void LogMessage(string messageText, bool message, bool warning, bool error)
     {
@@ -88,18 +93,16 @@ public class JobLogger
     {
         if ((!_logError && !_logMessage && !_logWarning) || !Enum.IsDefined(typeof(LogLevel), logLevel))
         {
-            throw new InvalidMessageManagementException("Error003: Error or Warning or Message must be specified");
+            throw new InvalidMessageManagementException("Error or Warning or Message must be specified");
         }
     }
 
-    private void LogToDataBase(string messageText, LogLevel logLevel)
+    private void LogToDataBase(string message, LogLevel logLevel)
     {
         try
         {
-            System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
-            connection.Open();
+            SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings["ConnectionString"]);
 
-            //variable t must be initialized
             var levelErrorOnDataBase = 0;
             switch (logLevel)
             {
@@ -124,8 +127,10 @@ public class JobLogger
                     break;
             }
 
-            System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + messageText + "', " + levelErrorOnDataBase.ToString() + ")");
+            connection.Open();
+            SqlCommand command = new SqlCommand("Insert into Log Values('" + message + "', " + levelErrorOnDataBase.ToString() + ")");
             command.ExecuteNonQuery();
+            connection.Close();
         }
         catch (Exception ex)
         {

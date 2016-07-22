@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\LogToDataBaseException.cs" />
+    <Compile Include="Exceptions\LogToFileException.cs" />
     <Compile Include="Exceptions\LogToConsoleException.cs" />
     <Compile Include="Exceptions\ObsoleteMethodException.cs" />
     <Compile Include="Exceptions\NotInitializedException.cs" />
