@@ -25,10 +25,11 @@ public class JobLogger
         _logToConsole = logToConsole;
     }
 
-    public static void LogMessage(string message, bool message, bool warning, bool error)
+    //replace "string message" by string messageText
+    public static void LogMessage(string messageText, bool message, bool warning, bool error)
     {
-        message.Trim();
-        if (message == null || message.Length == 0)
+        messageText.Trim();
+        if (messageText == null || messageText.Length == 0)
         {
             return;
         }
@@ -43,7 +44,9 @@ public class JobLogger
 
         System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
         connection.Open();
-        int t;
+
+        //variable t must be initialized
+        int t = 0;
         if (message && _logMessage)
         {
             t = 1;
@@ -59,7 +62,8 @@ public class JobLogger
         System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " +t.ToString() + ")");
         command.ExecuteNonQuery();
 
-        string l;
+        //variable l must be initialized
+        string l = string.Empty;
         if(!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt")) 
         {
             l = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"); 
