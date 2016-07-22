@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace _0.CodeProject.Exceptions
 {
-    class InvalidMessageManagement : Exception
+    public class InvalidMessageManagementException : Exception
     {
-        public InvalidMessageManagement()
+        public InvalidMessageManagementException()
         {
 
         }
 
-        public InvalidMessageManagement(string message): base(message)
+        public InvalidMessageManagementException(string message): base(message)
         {
 
         }
