@@ -92,33 +92,45 @@ public class JobLogger
 
     private void LogToDataBase(string messageText, LogLevel logLevel)
     {
-        System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
-        connection.Open();
-
-        //variable t must be initialized
-        var levelErrorOnDataBase = 0;
-        switch (logLevel)
+        try
         {
-            case LogLevel.Message:
-                if (_logMessage){
-                    levelErrorOnDataBase = 1;
-                }
-                break;
-            case LogLevel.Error:
-                if (_logError){
-                    levelErrorOnDataBase = 2;
-                }
-                break;
-            case LogLevel.Warning:
-            default:
-                if (_logWarning){
-                    levelErrorOnDataBase = 3;
-                }
-                break;
+            System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
+            connection.Open();
+
+            //variable t must be initialized
+            var levelErrorOnDataBase = 0;
+            switch (logLevel)
+            {
+                case LogLevel.Message:
+                    if (_logMessage)
+                    {
+                        levelErrorOnDataBase = 1;
+                    }
+                    break;
+                case LogLevel.Error:
+                    if (_logError)
+                    {
+                        levelErrorOnDataBase = 2;
+                    }
+                    break;
+                case LogLevel.Warning:
+                default:
+                    if (_logWarning)
+                    {
+                        levelErrorOnDataBase = 3;
+                    }
+                    break;
+            }
+
+            System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + messageText + "', " + levelErrorOnDataBase.ToString() + ")");
+            command.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            throw new LogToDataBaseException("Error DataBase: ", ex);
         }
 
-        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + messageText + "', " + levelErrorOnDataBase.ToString() + ")");
-        command.ExecuteNonQuery();
+
     }
 
     private void LogToFile(string messageText, LogLevel logLevel)
