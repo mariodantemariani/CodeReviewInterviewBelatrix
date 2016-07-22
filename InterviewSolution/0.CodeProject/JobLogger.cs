@@ -28,11 +28,12 @@ public class JobLogger
     //replace "string message" by string messageText
     public void LogMessage(string messageText, bool message, bool warning, bool error)
     {
-        messageText.Trim();
-        if (messageText == null || messageText.Length == 0)
+
+        if (string.IsNullOrWhiteSpace(messageText))
         {
             return;
         }
+
         if (!_logToConsole && !_logToFile && !LogToDatabase)
         {
             throw new Exception("Invalid configuration");
