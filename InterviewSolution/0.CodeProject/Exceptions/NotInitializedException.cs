@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace _0.CodeProject.Exceptions
 {
-    class InvalidConfigurationException : Exception
+    class NotInitializedException : Exception
     {
-        public InvalidConfigurationException()
+        public NotInitializedException()
         {
 
         }
 
-        public InvalidConfigurationException(string message): base(message)
+        public NotInitializedException(string message): base(message)
         {
 
         }

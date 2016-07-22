@@ -97,20 +97,24 @@ public class JobLogger
 
         }
 
-            
-        if (error && _logError)
+        if (_logToConsole)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            if (error && _logError)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+            }
+            if (warning && _logWarning)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+            }
+            if (message && _logMessage)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            Console.WriteLine(DateTime.Now.ToShortDateString() + message);
         }
-        if (warning && _logWarning)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-        }
-        if (message && _logMessage)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        Console.WriteLine(DateTime.Now.ToShortDateString() + message);
+
+        
     }
 
     private void validateMessageManagement(bool message, bool warning, bool error)

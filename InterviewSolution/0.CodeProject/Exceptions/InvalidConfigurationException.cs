@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace _0.CodeProject.Exceptions
 {
-    class InvalidConfigurationException : Exception
+    public class InvalidConfigurationException : Exception
     {
         public InvalidConfigurationException()
         {
