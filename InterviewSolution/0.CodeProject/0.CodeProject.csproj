@@ -44,8 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ObsoleteMethodException.cs" />
     <Compile Include="Exceptions\NotInitializedException.cs" />
-    <Compile Include="Exceptions\InvalidMessageManagement.cs" />
+    <Compile Include="Exceptions\InvalidMessageManagementException.cs" />
     <Compile Include="Exceptions\InvalidConfigurationException.cs" />
     <Compile Include="JobLogger.cs" />
     <Compile Include="Program.cs" />
