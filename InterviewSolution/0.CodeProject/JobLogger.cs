@@ -46,8 +46,13 @@ public class JobLogger
         }
     }
 
-    //replace "string message" by string messageText
+    [System.Obsolete("use method LogMessage(string message, LogLevel logLevel)")]
     public void LogMessage(string messageText, bool message, bool warning, bool error)
+    {
+        throw new ObsoleteMethodException("Method obselete, you must use LogMessage(string message, LogLevelEnm logLevel)");
+    }
+
+    public void LogMessage(string messageText, LogLevel logLevel = 0)
     {
         if (!_initialized)
         {
@@ -59,93 +64,130 @@ public class JobLogger
             return;
         }
 
-        validateMessageManagement(message, warning, error);
+        validateMessageManagement(logLevel);
 
         if (_logToDatabase)
         {
-            LogToDataBase(messageText, message, warning, error);
+            LogToDataBase(messageText, logLevel);
         }
 
         if (_logToFile)
         {
-            LogToFile(messageText, message, warning, error);            
+            LogToFile(messageText, logLevel);            
         }
 
         if (_logToConsole)
         {
-            LogToConsole(messageText, message, warning, error);
-        }
-    }
-    
-    private void validateMessageManagement(bool message, bool warning, bool error)
-    {
-        if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
-        {
-            throw new InvalidMessageManagementException("Error or Warning or Message must be specified");
+            LogToConsole(messageText, logLevel);
         }
     }
 
-    private void LogToDataBase(string messageText, bool message, bool warning, bool error)
+    private void validateMessageManagement(LogLevel logLevel)
+    {
+        if ((!_logError && !_logMessage && !_logWarning) || !Enum.IsDefined(typeof(LogLevel), logLevel))
+        {
+            throw new Exception("Error003: Error or Warning or Message must be specified");
+        }
+    }
+
+    private void LogToDataBase(string messageText, LogLevel logLevel)
     {
         System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
         connection.Open();
 
         //variable t must be initialized
         int levelErrorOnDataBase = 0;
-        if (message && _logMessage)
+        switch (logLevel)
         {
-            levelErrorOnDataBase = 1;
+            case LogLevel.Message:
+                if (_logMessage){
+                    levelErrorOnDataBase = 1;
+                }
+                break;
+            case LogLevel.Error:
+                if (_logError){
+                    levelErrorOnDataBase = 2;
+                }
+                break;
+            case LogLevel.Warning:
+            default:
+                if (_logWarning){
+                    levelErrorOnDataBase = 3;
+                }
+                break;
         }
-        if (error && _logError)
-        {
-            levelErrorOnDataBase = 2;
-        }
-        if (warning && _logWarning)
-        {
-            levelErrorOnDataBase = 3;
-        }
-        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " + levelErrorOnDataBase.ToString() + ")");
+
+        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + messageText + "', " + levelErrorOnDataBase.ToString() + ")");
         command.ExecuteNonQuery();
     }
 
-    private void LogToFile(string messageText, bool message, bool warning, bool error)
+    private void LogToFile(string messageText, LogLevel logLevel)
     {
         string levelErrorOnFile = string.Empty;
         if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
         {
             levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
         }
-        if (error && _logError)
+
+        switch (logLevel)
         {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
-        }
-        if (warning && _logWarning)
-        {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
-        }
-        if (message && _logMessage)
-        {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
+            case LogLevel.Error:
+                if (_logError)
+                {
+                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                }
+                break;
+            case LogLevel.Warning:
+                if (_logWarning)
+                {
+                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                }
+                break;
+            case LogLevel.Message:
+            default:
+                if (_logMessage)
+                {
+                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                }
+                break;
         }
 
         System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
     }
 
-    private void LogToConsole(string messageText, bool message, bool warning, bool error)
+    private void LogToConsole(string message, LogLevel logLevel)
     {
-        if (error && _logError)
+        try
         {
-            Console.ForegroundColor = ConsoleColor.Red;
+            switch (logLevel)
+            {
+                case LogLevel.Error:
+                    if (_logError){
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+
+                    break;
+                case LogLevel.Warning:
+                    if (_logWarning){
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                    }
+                    break;
+                case LogLevel.Message:
+                default:
+                    if (_logMessage){
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+
+                    break;
+            }
+
+            Console.WriteLine("{0} {1}", DateTime.Now.ToShortDateString(), message);
+
         }
-        if (warning && _logWarning)
+        catch (Exception ex)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            throw new ApplicationException("Error: Error console", ex);
         }
-        if (message && _logMessage)
-        {
-            Console.ForegroundColor = ConsoleColor.White;
-        }
-        Console.WriteLine(DateTime.Now.ToShortDateString() + message);
     }
 
 }
