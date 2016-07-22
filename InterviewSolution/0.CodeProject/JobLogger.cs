@@ -123,36 +123,43 @@ public class JobLogger
 
     private void LogToFile(string messageText, LogLevel logLevel)
     {
-        var levelErrorOnFile = string.Empty;
-        if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
+        try
         {
-            levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
-        }
+            var levelErrorOnFile = string.Empty;
+            if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
+            {
+                levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
+            }
 
-        switch (logLevel)
+            switch (logLevel)
+            {
+                case LogLevel.Error:
+                    if (_logError)
+                    {
+                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                    }
+                    break;
+                case LogLevel.Warning:
+                    if (_logWarning)
+                    {
+                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                    }
+                    break;
+                case LogLevel.Message:
+                default:
+                    if (_logMessage)
+                    {
+                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                    }
+                    break;
+            }
+
+            System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
+        }
+        catch (Exception ex)
         {
-            case LogLevel.Error:
-                if (_logError)
-                {
-                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
-                }
-                break;
-            case LogLevel.Warning:
-                if (_logWarning)
-                {
-                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
-                }
-                break;
-            case LogLevel.Message:
-            default:
-                if (_logMessage)
-                {
-                    levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
-                }
-                break;
+            throw new LogToFileException("Error: Error console", ex);
         }
-
-        System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
     }
 
     private void LogToConsole(string message, LogLevel logLevel)
