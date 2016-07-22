@@ -96,7 +96,7 @@ public class JobLogger
         connection.Open();
 
         //variable t must be initialized
-        int levelErrorOnDataBase = 0;
+        var levelErrorOnDataBase = 0;
         switch (logLevel)
         {
             case LogLevel.Message:
