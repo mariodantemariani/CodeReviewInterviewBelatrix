@@ -26,7 +26,7 @@ public class JobLogger
     }
 
     //replace "string message" by string messageText
-    public static void LogMessage(string messageText, bool message, bool warning, bool error)
+    public void LogMessage(string messageText, bool message, bool warning, bool error)
     {
         messageText.Trim();
         if (messageText == null || messageText.Length == 0)
