@@ -32,6 +32,7 @@ namespace _1.JobLoggerTest
         #region tests about JobLog method
         
         [TestMethod]
+        [Ignore]
         public void LogToDataBaseTest()
         {
             //Only LogDataBase test
