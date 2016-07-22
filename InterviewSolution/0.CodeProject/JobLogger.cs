@@ -12,20 +12,20 @@ public class JobLogger
     private static bool _logWarning;
     private static bool _logError;
 
-    // replace by _logToDatabase
-    private static bool LogToDatabase;
+    private static bool _logToDatabase;
 
     private bool _initialized;
+
     public JobLogger(bool logToFile, bool logToConsole, bool logToDatabase, bool logMessage, bool logWarning, bool logError)
     {
         _logError = logError;
         _logMessage = logMessage;
         _logWarning = logWarning;
-        LogToDatabase = logToDatabase;
+        _logToDatabase = logToDatabase;
         _logToFile = logToFile;
         _logToConsole = logToConsole;
 
-        if (!_logToConsole && !_logToFile && !LogToDatabase)
+        if (!_logToConsole && !_logToFile && !_logToDatabase)
         {
             throw new InvalidConfigurationException("Invalid configuration");
         }
