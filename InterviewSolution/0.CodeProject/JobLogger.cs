@@ -86,7 +86,7 @@ public class JobLogger
     {
         if ((!_logError && !_logMessage && !_logWarning) || !Enum.IsDefined(typeof(LogLevel), logLevel))
         {
-            throw new Exception("Error003: Error or Warning or Message must be specified");
+            throw new InvalidMessageManagementException("Error003: Error or Warning or Message must be specified");
         }
     }
 
@@ -129,8 +129,6 @@ public class JobLogger
         {
             throw new LogToDataBaseException("Error DataBase: ", ex);
         }
-
-
     }
 
     private void LogToFile(string messageText, LogLevel logLevel)
@@ -170,7 +168,7 @@ public class JobLogger
         }
         catch (Exception ex)
         {
-            throw new LogToFileException("Error: Error console", ex);
+            throw new LogToFileException("Error log to File:", ex);
         }
     }
 
@@ -205,7 +203,7 @@ public class JobLogger
         }
         catch (Exception ex)
         {
-            throw new LogToConsoleException("Error: Error console", ex);
+            throw new LogToConsoleException("Error to Console: ", ex);
         }
     }
 
