@@ -57,27 +57,15 @@ public class JobLogger
 
         if (_logToFile)
         {
-            LogToFile(message, warning, error);            
+            LogToFile();            
         }
 
         if (_logToConsole)
         {
-            if (error && _logError)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-            }
-            if (warning && _logWarning)
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            }
-            if (message && _logMessage)
-            {
-                Console.ForegroundColor = ConsoleColor.White;
-            }
-            Console.WriteLine(DateTime.Now.ToShortDateString() + message);
+            LogToConsole(message, warning, error);
         }
     }
-
+    
     private void validateMessageManagement(bool message, bool warning, bool error)
     {
         if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
@@ -130,6 +118,23 @@ public class JobLogger
         }
 
         System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
+    }
+
+    private void LogToConsole(bool message, bool warning, bool error)
+    {
+        if (error && _logError)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+        }
+        if (warning && _logWarning)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+        }
+        if (message && _logMessage)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+        Console.WriteLine(DateTime.Now.ToShortDateString() + message);
     }
 
 }
