@@ -108,7 +108,7 @@ public class JobLogger
         command.ExecuteNonQuery();
     }
 
-    private void LogToFile(bool message, bool warning, bool error)
+    private void LogToFile(string messageText, bool message, bool warning, bool error)
     {
         string levelErrorOnFile = string.Empty;
         if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
