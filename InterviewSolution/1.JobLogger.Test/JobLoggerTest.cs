@@ -60,6 +60,20 @@ namespace _1.JobLoggerTest
             Assert.AreEqual(expectedString, actualString);
         }
 
+        [TestMethod]
+        public void LogToConsoleTest()
+        {
+            //Only LogConsole Test
+            JobLogger init = new JobLogger(false, true, false, true, true, true);
+
+            init.LogMessage(msgToTest, JobLogger.LogLevel.Message);
+
+            string expectedString = string.Format("{0} {1}", DateTime.Now.ToShortDateString(), msgToTest);
+            string actualString = expectedString;
+
+            Assert.AreEqual(expectedString, actualString);
+
+        }
         #endregion
 
 
