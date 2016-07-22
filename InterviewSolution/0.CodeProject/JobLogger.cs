@@ -100,7 +100,7 @@ public class JobLogger
     {
         if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
         {
-            throw new Exception("Error or Warning or Message must be specified");
+            throw new InvalidMessageManagement("Error or Warning or Message must be specified");
         }
     }
 }
