@@ -1,5 +1,7 @@
 ﻿using _0.CodeProject.Exceptions;
 using System;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -139,13 +141,13 @@ public class JobLogger
 
             var parseDate = DateTime.Now.ToShortDateString().Replace("/", "-");
 
-            var path = System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + parseDate + ".txt";
+            var path = ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + parseDate + ".txt";
 
-            if (!System.IO.File.Exists(path))
+            if (!File.Exists(path))
             {
-                System.IO.File.Create(path).Dispose();
+                File.Create(path).Dispose();
 
-                levelErrorOnFile = System.IO.File.ReadAllText(path);
+                levelErrorOnFile = File.ReadAllText(path);
             }
 
             switch (logLevel)
@@ -153,21 +155,21 @@ public class JobLogger
                 case LogLevel.Error:
                     if (_logError)
                     {
-                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                        levelErrorOnFile = String.Format("{0} {1}", levelErrorOnFile + DateTime.Now.ToShortDateString(), messageText + Environment.NewLine);
 
                     }
                     break;
                 case LogLevel.Warning:
                     if (_logWarning)
                     {
-                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                        levelErrorOnFile = String.Format("{0} {1}", levelErrorOnFile + DateTime.Now.ToShortDateString(), messageText + Environment.NewLine);
                     }
                     break;
                 case LogLevel.Message:
                 default:
                     if (_logMessage)
                     {
-                        levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+                        levelErrorOnFile = String.Format("{0} {1}", levelErrorOnFile + DateTime.Now.ToShortDateString(), messageText + Environment.NewLine);
                     }
                     break;
             }
