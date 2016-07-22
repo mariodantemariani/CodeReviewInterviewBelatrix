@@ -16,6 +16,15 @@ public class JobLogger
 
     private bool _initialized;
 
+    #region Enum LogLevel
+    public enum LogLevel
+    {
+        Message = 0,
+        Warning = 1,
+        Error = 2
+    }
+    #endregion
+
     public JobLogger(bool logToFile, bool logToConsole, bool logToDatabase, bool logMessage, bool logWarning, bool logError)
     {
         _logError = logError;
@@ -57,7 +66,7 @@ public class JobLogger
 
         if (_logToFile)
         {
-            LogToFile();            
+            LogToFile(message, warning, error);            
         }
 
         if (_logToConsole)
