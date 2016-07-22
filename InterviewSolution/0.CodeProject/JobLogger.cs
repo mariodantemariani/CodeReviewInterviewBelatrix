@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _0.CodeProject.Exceptions;
+using System;
 using System.Linq;
 using System.Text;
 
@@ -26,7 +27,7 @@ public class JobLogger
 
         if (!_logToConsole && !_logToFile && !LogToDatabase)
         {
-            throw new Exception("Invalid configuration");
+            throw new InvalidConfigurationException("Invalid configuration");
         }
     }
 
