@@ -23,21 +23,21 @@ public class JobLogger
         LogToDatabase = logToDatabase;
         _logToFile = logToFile;
         _logToConsole = logToConsole;
-    }
-
-    //replace "string message" by string messageText
-    public void LogMessage(string messageText, bool message, bool warning, bool error)
-    {
-
-        if (string.IsNullOrWhiteSpace(messageText))
-        {
-            return;
-        }
 
         if (!_logToConsole && !_logToFile && !LogToDatabase)
         {
             throw new Exception("Invalid configuration");
         }
+    }
+
+    //replace "string message" by string messageText
+    public void LogMessage(string messageText, bool message, bool warning, bool error)
+    {
+        if (string.IsNullOrWhiteSpace(messageText))
+        {
+            return;
+        }
+
         if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
         {
             throw new Exception("Error or Warning or Message must be specified");
