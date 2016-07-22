@@ -10,7 +10,10 @@ public class JobLogger
     private static bool _logMessage;
     private static bool _logWarning;
     private static bool _logError;
+
+    // replace by _logToDatabase
     private static bool LogToDatabase;
+
     private bool _initialized;
     public JobLogger(bool logToFile, bool logToConsole, bool logToDatabase, bool logMessage, bool logWarning, bool logError)
     {
