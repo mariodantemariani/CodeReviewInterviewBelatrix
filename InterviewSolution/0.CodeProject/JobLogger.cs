@@ -73,7 +73,7 @@ public class JobLogger
 
         if (_logToConsole)
         {
-            LogToConsole(message, warning, error);
+            LogToConsole(messageText, message, warning, error);
         }
     }
     
@@ -131,7 +131,7 @@ public class JobLogger
         System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
     }
 
-    private void LogToConsole(bool message, bool warning, bool error)
+    private void LogToConsole(string messageText, bool message, bool warning, bool error)
     {
         if (error && _logError)
         {
