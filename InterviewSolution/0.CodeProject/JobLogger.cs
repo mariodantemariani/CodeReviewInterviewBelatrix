@@ -39,11 +39,8 @@ public class JobLogger
             return;
         }
 
-        if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
-        {
-            throw new Exception("Error or Warning or Message must be specified");
-        }
-
+        validateMessageManagement(message, warning, error);
+               
         System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
         connection.Open();
 
@@ -97,5 +94,13 @@ public class JobLogger
             Console.ForegroundColor = ConsoleColor.White;
         }
         Console.WriteLine(DateTime.Now.ToShortDateString() + message);
+    }
+
+    private void validateMessageManagement(bool message, bool warning, bool error)
+    {
+        if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
+        {
+            throw new Exception("Error or Warning or Message must be specified");
+        }
     }
 }
