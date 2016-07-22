@@ -73,28 +73,31 @@ public class JobLogger
             command.ExecuteNonQuery();
         }
 
-       
+        if (_logToFile)
+        {
+            string levelErrorOnFile = string.Empty;
+            if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
+            {
+                levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
+            }
+            if (error && _logError)
+            {
+                levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
+            }
+            if (warning && _logWarning)
+            {
+                levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
+            }
+            if (message && _logMessage)
+            {
+                levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
+            }
 
-        //variable l must be initialized
-        string levelErrorOnFile = string.Empty;
-        if(!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt")) 
-        {
-            levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"); 
-        }
-        if (error && _logError)
-        {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
-        }
-        if (warning && _logWarning)
-        {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
-        }
-        if (message && _logMessage)
-        {
-            levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + message;
+            System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
+
         }
 
-        System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
+            
         if (error && _logError)
         {
             Console.ForegroundColor = ConsoleColor.Red;
