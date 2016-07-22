@@ -49,26 +49,31 @@ public class JobLogger
         }
 
         validateMessageManagement(message, warning, error);
-               
-        System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
-        connection.Open();
 
-        //variable t must be initialized
-        int levelErrorOnDataBase = 0;
-        if (message && _logMessage)
+        if (_logToDatabase)
         {
-            levelErrorOnDataBase = 1;
+            System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
+            connection.Open();
+
+            //variable t must be initialized
+            int levelErrorOnDataBase = 0;
+            if (message && _logMessage)
+            {
+                levelErrorOnDataBase = 1;
+            }
+            if (error && _logError)
+            {
+                levelErrorOnDataBase = 2;
+            }
+            if (warning && _logWarning)
+            {
+                levelErrorOnDataBase = 3;
+            }
+            System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " + levelErrorOnDataBase.ToString() + ")");
+            command.ExecuteNonQuery();
         }
-        if (error && _logError)
-        {
-            levelErrorOnDataBase = 2;
-        }
-        if (warning && _logWarning)
-        {
-            levelErrorOnDataBase = 3;
-        }
-        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " +levelErrorOnDataBase.ToString() + ")");
-        command.ExecuteNonQuery();
+
+       
 
         //variable l must be initialized
         string levelErrorOnFile = string.Empty;
