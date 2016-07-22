@@ -63,12 +63,12 @@ public class JobLogger
 
         if (_logToDatabase)
         {
-            LogToDataBase(message, warning, error);
+            LogToDataBase(messageText, message, warning, error);
         }
 
         if (_logToFile)
         {
-            LogToFile(message, warning, error);            
+            LogToFile(messageText, message, warning, error);            
         }
 
         if (_logToConsole)
@@ -85,7 +85,7 @@ public class JobLogger
         }
     }
 
-    private void LogToDataBase(bool message, bool warning, bool error)
+    private void LogToDataBase(string messageText, bool message, bool warning, bool error)
     {
         System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
         connection.Open();
