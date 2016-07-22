@@ -123,7 +123,7 @@ public class JobLogger
 
     private void LogToFile(string messageText, LogLevel logLevel)
     {
-        string levelErrorOnFile = string.Empty;
+        var levelErrorOnFile = string.Empty;
         if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
         {
             levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");

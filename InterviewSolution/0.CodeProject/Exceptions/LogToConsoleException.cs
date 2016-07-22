@@ -18,6 +18,9 @@ namespace _0.CodeProject.Exceptions
 
         }
 
+        public LogToConsoleException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 
 }
