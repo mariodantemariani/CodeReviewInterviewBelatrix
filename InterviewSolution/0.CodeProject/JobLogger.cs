@@ -16,13 +16,15 @@ public class JobLogger
 
     private bool _initialized;
 
-    #region Enum LogLevel
+    #region Enum LogLevel is used for handling the message type 
+
     public enum LogLevel
     {
         Message = 0,
         Warning = 1,
         Error = 2
     }
+
     #endregion
 
     public JobLogger(bool logToFile, bool logToConsole, bool logToDatabase, bool logMessage, bool logWarning, bool logError)
@@ -79,7 +81,7 @@ public class JobLogger
     {
         if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
         {
-            throw new InvalidMessageManagement("Error or Warning or Message must be specified");
+            throw new InvalidMessageManagementException("Error or Warning or Message must be specified");
         }
     }
 
