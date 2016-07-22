@@ -45,20 +45,20 @@ public class JobLogger
         connection.Open();
 
         //variable t must be initialized
-        int t = 0;
+        int levelErrorOnDataBase = 0;
         if (message && _logMessage)
         {
-            t = 1;
+            levelErrorOnDataBase = 1;
         }
         if (error && _logError)
         {
-            t = 2;
+            levelErrorOnDataBase = 2;
         }
         if (warning && _logWarning)
         {
-            t = 3;
+            levelErrorOnDataBase = 3;
         }
-        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " +t.ToString() + ")");
+        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " +levelErrorOnDataBase.ToString() + ")");
         command.ExecuteNonQuery();
 
         //variable l must be initialized
