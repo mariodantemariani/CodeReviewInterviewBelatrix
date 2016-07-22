@@ -33,44 +33,50 @@ namespace _1.JobLoggerTest
         
         [TestMethod]
         [Ignore]
-        public void LogToDataBaseTest()
+        public void LogToDataBaseOnlyTest()
         {
-            //Only LogDataBase test
+            //Arrange
             JobLogger init = new JobLogger(false, false, true, true, true, true);
 
-            init.LogMessage(msgToTest, JobLogger.LogLevel.Error);
-
-            string expectedString = string.Format("{0} {1}", DateTime.Now.ToShortDateString(), msgToTest);
-            string actualString = expectedString; 
-
-            Assert.AreEqual(expectedString, actualString);
-        }
-
-        [TestMethod]
-        public void LogToFileTest()
-        {
-            //Only LogFile Test
-            JobLogger init = new JobLogger(true, false, false, true, true, true);
-
+            //Act
             init.LogMessage(msgToTest, JobLogger.LogLevel.Error);
 
             string expectedString = string.Format("{0} {1}", DateTime.Now.ToShortDateString(), msgToTest);
             string actualString = expectedString;
 
+            //Assert
             Assert.AreEqual(expectedString, actualString);
         }
 
         [TestMethod]
-        public void LogToConsoleTest()
+        public void LogToFileOnlyTest()
         {
-            //Only LogConsole Test
+            //Arrange
+            JobLogger init = new JobLogger(true, false, false, true, true, true);
+
+            //Act
+            init.LogMessage(msgToTest, JobLogger.LogLevel.Error);
+
+            string expectedString = string.Format("{0} {1}", DateTime.Now.ToShortDateString(), msgToTest);
+            string actualString = expectedString;
+
+            //Assert
+            Assert.AreEqual(expectedString, actualString);
+        }
+
+        [TestMethod]
+        public void LogToConsoleOnlyTest()
+        {
+            //Arrange
             JobLogger init = new JobLogger(false, true, false, true, true, true);
 
+            //Act
             init.LogMessage(msgToTest, JobLogger.LogLevel.Message);
 
             string expectedString = string.Format("{0} {1}", DateTime.Now.ToShortDateString(), msgToTest);
             string actualString = expectedString;
 
+            //Assert
             Assert.AreEqual(expectedString, actualString);
 
         }
