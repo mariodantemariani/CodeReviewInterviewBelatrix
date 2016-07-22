@@ -52,25 +52,7 @@ public class JobLogger
 
         if (_logToDatabase)
         {
-            System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
-            connection.Open();
-
-            //variable t must be initialized
-            int levelErrorOnDataBase = 0;
-            if (message && _logMessage)
-            {
-                levelErrorOnDataBase = 1;
-            }
-            if (error && _logError)
-            {
-                levelErrorOnDataBase = 2;
-            }
-            if (warning && _logWarning)
-            {
-                levelErrorOnDataBase = 3;
-            }
-            System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " + levelErrorOnDataBase.ToString() + ")");
-            command.ExecuteNonQuery();
+            LogToDataBase(message, warning, error);
         }
 
         if (_logToFile)
@@ -117,6 +99,8 @@ public class JobLogger
         
     }
 
+    
+
     private void validateMessageManagement(bool message, bool warning, bool error)
     {
         if ((!_logError && !_logMessage && !_logWarning) || (!message && !warning && !error))
@@ -124,4 +108,29 @@ public class JobLogger
             throw new InvalidMessageManagement("Error or Warning or Message must be specified");
         }
     }
+
+    private void LogToDataBase(bool message, bool warning, bool error)
+    {
+        System.Data.SqlClient.SqlConnection connection = new System.Data.SqlClient.SqlConnection(System.Configuration.ConfigurationManager.AppSettings["ConnectionString"]);
+        connection.Open();
+
+        //variable t must be initialized
+        int levelErrorOnDataBase = 0;
+        if (message && _logMessage)
+        {
+            levelErrorOnDataBase = 1;
+        }
+        if (error && _logError)
+        {
+            levelErrorOnDataBase = 2;
+        }
+        if (warning && _logWarning)
+        {
+            levelErrorOnDataBase = 3;
+        }
+        System.Data.SqlClient.SqlCommand command = new System.Data.SqlClient.SqlCommand("Insert into Log Values('" + message + "', " + levelErrorOnDataBase.ToString() + ")");
+        command.ExecuteNonQuery();
+    }
+
+    
 }
