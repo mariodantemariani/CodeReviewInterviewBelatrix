@@ -136,9 +136,16 @@ public class JobLogger
         try
         {
             var levelErrorOnFile = string.Empty;
-            if (!System.IO.File.Exists(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt"))
+
+            var parseDate = DateTime.Now.ToShortDateString().Replace("/", "-");
+
+            var path = System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + parseDate + ".txt";
+
+            if (!System.IO.File.Exists(path))
             {
-                levelErrorOnFile = System.IO.File.ReadAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt");
+                System.IO.File.Create(path).Dispose();
+
+                levelErrorOnFile = System.IO.File.ReadAllText(path);
             }
 
             switch (logLevel)
@@ -147,6 +154,7 @@ public class JobLogger
                     if (_logError)
                     {
                         levelErrorOnFile = levelErrorOnFile + DateTime.Now.ToShortDateString() + messageText;
+
                     }
                     break;
                 case LogLevel.Warning:
@@ -163,8 +171,9 @@ public class JobLogger
                     }
                     break;
             }
+            
+            System.IO.File.AppendAllText(path, levelErrorOnFile);
 
-            System.IO.File.WriteAllText(System.Configuration.ConfigurationManager.AppSettings["LogFileDirectory"] + "LogFile" + DateTime.Now.ToShortDateString() + ".txt", levelErrorOnFile);
         }
         catch (Exception ex)
         {
